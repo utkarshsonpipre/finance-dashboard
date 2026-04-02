@@ -1,173 +1,99 @@
-# Finance Dashboard
+# 📈 Zorvyn Finance Dashboard
 
-A full-stack financial records management system with JWT-based auth, role-based access control, MongoDB aggregation-powered analytics, and a minimal Next.js + Tailwind frontend.
+> **Live Demo:** [https://finance-dashboard-rho-one.vercel.app](https://finance-dashboard-rho-one.vercel.app)
 
-## Tech Stack
+A full-stack, enterprise-grade financial records management system complete with **Clerk Authentication**, self-serve **Role-Based Access Control (RBAC)**, robust MongoDB aggregation analytics, and a beautiful minimal Next.js + Tailwind frontend.
+
+---
+
+## ⚡ Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Next.js 16 (App Router) + Tailwind CSS |
-| Backend | Express.js (custom Next.js server) |
-| Database | MongoDB + Mongoose |
-| Auth | JWT (jsonwebtoken + bcryptjs) |
-| Validation | Zod |
-| Language | TypeScript (strict) |
+| **Frontend** | Next.js 16 (App Router) + React + Tailwind CSS |
+| **Backend** | Express.js (custom Next.js server routing) |
+| **Database** | MongoDB + Mongoose |
+| **Auth** | **Clerk** (Drop-in UI + Webhook synchronization) |
+| **Validation** | Zod (Strict schema enforcement) |
+| **Language** | TypeScript (strict mode) |
 
-## Quick Start
+## ✨ Core Features
+
+1. **Seamless Authentication**: Powered by Clerk. Users can securely sign up via OAuth or email.
+2. **Self-Serve Role Selection**: Upon their first login, users select their own role (`Viewer`, `Analyst`, or `Admin`). A robust race-condition-protected backend syncs this flawlessly into MongoDB.
+3. **Role-Based Access Control**:
+   - `Viewer`: Can only view the global dashboard summary metrics.
+   - `Analyst`: Can view records, chronological tables, and access deep-dive insights.
+   - `Admin`: Can create, update, and manage financial records freely.
+4. **Dashboard Analytics**: Tracks Total Income, Total Expenses, and Net Balance using dynamic MongoDB aggregation pipelines.
+
+---
+
+## 🚀 Quick Start (Local Development)
 
 ### Prerequisites
 - Node.js >= 20
-- MongoDB running locally on port 27017 (or Atlas URI)
+- MongoDB running locally on port 27017 (or an Atlas URI)
+- A [Clerk](https://clerk.com) Account for Authentication keys.
 
 ### 1. Clone & Install
 ```bash
-git clone <repo-url>
-cd zorvyn
+git clone https://github.com/utkarshsonpipre/finance-dashboard.git
+cd finance-dashboard
 npm install
 ```
 
 ### 2. Configure Environment
+Copy the example environment file and fill in your keys:
 ```bash
-cp .env.example .env.local
-# Edit .env.local — set MONGODB_URI and JWT_SECRET
+cp .env.example .env
+```
+Ensure your `.env` includes your Clerk keys and MongoDB URL:
+```env
+MONGODB_URI=mongodb+srv://...
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+CLERK_WEBHOOK_SECRET=whsec_...
+
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/select-role
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/select-role
 ```
 
-### 3. Seed the Database (optional but recommended)
-```bash
-npm run seed
-```
-This creates 3 test users and 10 sample records.
-
-**Default credentials:**
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@finance.dev | Admin1234! |
-| Analyst | analyst@finance.dev | Analyst1234! |
-| Viewer | viewer@finance.dev | Viewer1234! |
-
-### 4. Start the Dev Server
+### 3. Start the Dev Server
 ```bash
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000)
 
+_Note: For local development, Clerk's `user.created` webhooks require an Ngrok tunnel to hit your local machine. If Ngrok isn't running, the backend will automatically intercept your role-selection, gracefully fetch your info from the Clerk REST API, and synchronize the database manually!_
+
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```
-zorvyn/
+finance-dashboard/
 ├── server.ts                 # Custom Express + Next.js entry point
 ├── src/
 │   ├── app.ts                # Express app factory
-│   ├── app/                  # Next.js App Router pages
-│   │   ├── layout.tsx
-│   │   ├── page.tsx          # Root redirect
-│   │   ├── login/page.tsx    # Login page
-│   │   └── dashboard/page.tsx# Dashboard page
-│   ├── controllers/          # Route handlers
-│   │   ├── authController.ts
-│   │   ├── recordController.ts
-│   │   └── dashboardController.ts
-│   ├── services/             # Business logic + Zod schemas
-│   │   ├── authService.ts
-│   │   ├── recordService.ts
-│   │   └── dashboardService.ts
-│   ├── models/               # Mongoose schemas
-│   │   ├── User.ts
-│   │   └── FinancialRecord.ts
-│   ├── middleware/
-│   │   ├── auth.ts           # verifyJWT + authorizeRoles
-│   │   ├── validate.ts       # Zod validation middleware
-│   │   ├── errorHandler.ts   # Global error handler
-│   │   └── rateLimiter.ts    # express-rate-limit
-│   ├── routes/
-│   │   ├── authRoutes.ts
-│   │   ├── recordRoutes.ts
-│   │   └── dashboardRoutes.ts
-│   ├── utils/
-│   │   ├── db.ts             # MongoDB connection
-│   │   ├── jwt.ts            # Token helpers
-│   │   └── response.ts       # Standardized API responses
-│   ├── lib/
-│   │   └── api.ts            # Frontend fetch wrapper
-│   └── types/
-│       └── index.ts          # Shared TypeScript types
-├── scripts/
-│   └── seed.ts               # DB seeder
-├── docs/
-│   └── api.md                # Full API documentation
-├── Dockerfile
-├── docker-compose.yml
-└── .env.example
+│   ├── app/                  # Next.js App Router (Frontend)
+│   │   ├── dashboard/page.tsx# Dashboard & Gatekeeper logic
+│   │   ├── login/page.tsx    # Clerk Sign-In
+│   │   └── select-role/      # Onboarding role selection UI
+│   ├── controllers/          # Express Route Handlers
+│   ├── services/             # Business logic & DB Operations
+│   ├── models/               # Mongoose Schemas (User, Records)
+│   ├── middleware/           # RBAC & Error Handling
+│   └── routes/               # Express API definitions
+├── render.yaml               # Cloud infrastructure blueprint
+└── docs/api.md               # Full Backend API specification
 ```
 
-## API Reference
+## 🌐 Deployment (Vercel / Render)
 
-See [`docs/api.md`](./docs/api.md) for full API documentation.
+This application is equipped with a `render.yaml` file for immediate, autonomous deployment of the Express/Next.js instance on Render's cloud infrastructure. It has also been tailored to run powerfully via Vercel.
 
-**Base:** `http://localhost:3000/api`
+**Live Project link**: [https://finance-dashboard-rho-one.vercel.app](https://finance-dashboard-rho-one.vercel.app)
 
-| Resource | Endpoints |
-|----------|-----------|
-| Auth | `POST /auth/register`, `POST /auth/login` |
-| Records | `GET/POST /records`, `PATCH/DELETE /records/:id` |
-| Dashboard | `GET /dashboard/summary`, `/category-totals`, `/monthly-trends`, `/recent-transactions` |
-
-## Role-Based Access
-
-| Action | Viewer | Analyst | Admin |
-|--------|--------|---------|-------|
-| Read records & summary | ✅ | ✅ | ✅ |
-| Analytics (category/monthly) | ❌ | ✅ | ✅ |
-| Create/Update/Delete records | ❌ | ❌ | ✅ |
-
-## Docker
-
-```bash
-# Start app + MongoDB
-docker-compose up -d
-
-# Seed inside container
-docker-compose exec app npm run seed
-```
-
-## Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `MONGODB_URI` | ✅ | MongoDB connection string |
-| `JWT_SECRET` | ✅ | Secret key for JWT signing |
-| `JWT_EXPIRES_IN` | ❌ | Token expiry (default: `7d`) |
-| `PORT` | ❌ | Server port (default: `3000`) |
-| `NODE_ENV` | ❌ | `development` or `production` |
-
-## Assumptions
-
-1. JWT is stored in **localStorage** for simplicity (production apps should use `httpOnly` cookies).
-2. Roles are assigned at registration — there is no admin UI for role management (use the seed script or MongoDB directly).
-3. The custom server approach is used to satisfy the Express.js requirement while keeping a single unified port.
-4. Financial amounts are stored as plain numbers without currency — the frontend renders them in INR (₹).
-5. Rate limiting uses in-memory storage; for multi-instance deployments, switch to Redis-backed `rate-limit-redis`.
-
-## Running Automated Tests
-
-This project includes a comprehensive integration test suite for backend APIs using Vitest and Supertest.
-
-### 1. Seed the Database (Recommended)
-Before running tests, seed the database with test users and records:
-```bash
-npm run seed
-```
-
-### 2. Run All Tests
-```bash
-npm run test
-```
-
-- Tests are located in the `tests/` directory.
-- The suite covers authentication, access control, CRUD, and dashboard analytics for all roles.
-- Update the test tokens in `tests/api.integration.test.ts` with valid JWTs for the seeded users (see credentials above).
-
-### 3. Test Output
-Vitest will display a summary of all passing and failing tests. All core backend features are covered.
+_When deploying to production, ensure your Clerk Dashboard Webhooks are pointed to `https://your-domain.com/api/webhooks/clerk`._
