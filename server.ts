@@ -7,7 +7,6 @@ import { createServer, IncomingMessage, ServerResponse } from 'http'
 import { parse } from 'url'
 import 'dotenv/config'
 import { connectDB } from '@/utils/db'
-import { createExpressApp } from '@/app'
 
 const port = parseInt(process.env.PORT ?? '3000', 10)
 const dev = process.env.NODE_ENV !== 'production'
