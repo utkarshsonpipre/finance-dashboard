@@ -22,19 +22,10 @@ async function main() {
   const handle = nextApp.getRequestHandler()
   await nextApp.prepare()
 
-  // 3. Create Express app
-  const expressApp = createExpressApp()
-
-  // 4. Create a single HTTP server
-  //    Express handles /api/* — Next.js handles everything else
+  // 3. Create a single HTTP server bypassing Express to match Vercel exactly
   const server = createServer((req: IncomingMessage, res: ServerResponse) => {
-    if (req.url?.startsWith('/api/')) {
-      // Express expects (req, res) as Node http types — cast is safe here
-      expressApp(req as any, res as any)
-    } else {
-      const parsedUrl = parse(req.url ?? '/', true)
-      handle(req, res, parsedUrl)
-    }
+    const parsedUrl = parse(req.url ?? '/', true)
+    handle(req, res, parsedUrl)
   })
 
   server.listen(port, () => {
