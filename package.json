@@ -3,24 +3,46 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "nodemon --watch src --watch server.ts --ext ts,tsx,json --exec \"ts-node --transpile-only -r tsconfig-paths/register server.ts\"",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "NODE_ENV=production ts-node --transpile-only -r tsconfig-paths/register server.ts",
+    "lint": "eslint",
+    "seed": "ts-node --transpile-only -r tsconfig-paths/register scripts/seed.ts",
+    "test": "vitest"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
+    "@clerk/nextjs": "^7.0.8",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.3.3",
+    "morgan": "^1.10.1",
     "next": "16.2.2",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "svix": "^1.89.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/supertest": "^7.2.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5",
+    "vitest": "^4.1.2"
   }
 }

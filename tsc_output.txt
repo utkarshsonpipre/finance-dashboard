@@ -1,0 +1,24 @@
+﻿src/app/page.tsx(5,10): error TS2724: '"@clerk/nextjs"' has no exported member named 'SignedIn'. Did you mean 'SignIn'?
+src/app/page.tsx(5,20): error TS2305: Module '"@clerk/nextjs"' has no exported member 'SignedOut'.
+src/controllers/recordController.ts(32,26): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/controllers/recordController.ts(32,38): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/controllers/recordController.ts(42,39): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/controllers/recordController.ts(52,24): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/middleware/validate.ts(20,29): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/middleware/validate.ts(20,41): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/routes/dashboardRoutes.ts(15,12): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'MiddlewareRequireAuthProp' is not assignable to parameter of type 'PathParams'.
+src/routes/recordRoutes.ts(13,12): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'MiddlewareRequireAuthProp' is not assignable to parameter of type 'PathParams'.
+src/services/recordService.ts(10,22): error TS2353: Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
+src/services/recordService.ts(11,11): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: readonly ["income", "expense"], params?: string | { error?: string | $ZodErrorMap<$ZodIssueInvalidValue<unknown>> | undefined; message?: string | undefined; } | undefined): ZodEnum<...>', gave the following error.
+    Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidValue<unknown>> | undefined; message?: string | undefined; }'.
+  Overload 2 of 2, '(entries: Readonly<Record<string, EnumValue>>, params?: string | { error?: string | $ZodErrorMap<$ZodIssueInvalidValue<unknown>> | undefined; message?: string | undefined; } | undefined): ZodEnum<...>', gave the following error.
+    Argument of type 'string[]' is not assignable to parameter of type 'Readonly<Record<string, EnumValue>>'.
+      Index signature for type 'string' is missing in type 'string[]'.
+src/services/recordService.ts(13,25): error TS2353: Object literal may only specify known properties, and 'required_error' does not exist in type '{ error?: string | $ZodErrorMap<$ZodIssueInvalidType<unknown>> | undefined; message?: string | undefined; }'.
